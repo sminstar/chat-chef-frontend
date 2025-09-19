@@ -9,16 +9,49 @@ const Info = () => {
   // logic
   const history = useNavigate();
   // TODO: set함수 추가하기
-  const [ingredientList] = useState([]); // 사용자가 입력할 재료 목록
+  const [ingredientList, setIngredientList] = useState([]); // 사용자가 입력할 재료 목록
 
   const addIngredient = () => {
     console.log("재료 추가하기");
+    //input 추가
+    const id = Date.now();
+    const newItem = {      
+      id, //id: id,
+      label: `ingredient${id}`,
+      text: "재료명",
+      value: ""//사용자가 입력할 재료 value
+    }
+
+    setIngredientList((prev) => [...prev, newItem])
   };
+
+  const handleRemove = (selectedId) => {
+  console.log("🚀 ~ handleRemove ~ selectedId:", selectedId)
+
+    if(ingredientList != null && ingredientList.length > 0){
+      setIngredientList(ingredientList.filter((item) => item.id !== selectedId));
+    }
+  }
 
   const handleNext = () => {
     // console.log("chat페이지로 이동");
     history("/chat");
   };
+
+  // const todoList = [
+  //   {
+  //     id: 1,
+  //     text: "HTML학습"
+  //   },
+  //   {
+  //     id: 1,
+  //     text: "CSS학습"
+  //   },
+  //   {
+  //     id: 1,
+  //     text: "JS학습"
+  //   }
+  // ]
 
   // view
   return (
@@ -42,8 +75,11 @@ const Info = () => {
             {/* START:input 영역 */}
             <div>
               {ingredientList.map((item) => (
-                <InfoInput key={item.id} content={item} />
+                <InfoInput key={item.id} content={item} onRemove={handleRemove}/>
               ))}
+              {/* <ul>
+                {todoList.map(item => <li key={item.id}>{item.text}</li>)}
+              </ul> */}
             </div>
             {/* END:input 영역 */}
           </form>
