@@ -9,7 +9,8 @@ function App() {
   //사전준비
   //1)git bash 에서 git clone https://github.com/sminstar/learn-react.git  로컬에 불러오기 실행
   //2) node_modules 별도 설치 필요(용량이 커서) - node comand 터미널에서 yarn 명령어 수행
-
+  //.env 메모 보기
+  
   // view
   return (
     <Routes>
