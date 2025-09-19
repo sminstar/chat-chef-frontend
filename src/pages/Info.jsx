@@ -12,7 +12,7 @@ const Info = () => {
   const [ingredientList, setIngredientList] = useState([]); // 사용자가 입력할 재료 목록
 
   const addIngredient = () => {
-    console.log("재료 추가하기");
+    //console.log("재료 추가하기");
     //input 추가
     const id = Date.now();
     const newItem = {      
@@ -31,6 +31,10 @@ const Info = () => {
     if(ingredientList != null && ingredientList.length > 0){
       setIngredientList(ingredientList.filter((item) => item.id !== selectedId));
     }
+  }
+
+  const handleInputChange = (updateItem) => {
+    setIngredientList((prev) => prev.map((item) => item.id === updateItem.id?updateItem:item));
   }
 
   const handleNext = () => {
@@ -75,7 +79,10 @@ const Info = () => {
             {/* START:input 영역 */}
             <div>
               {ingredientList.map((item) => (
-                <InfoInput key={item.id} content={item} onRemove={handleRemove}/>
+                <InfoInput key={item.id} 
+                          content={item} 
+                          onRemove={handleRemove} 
+                          onChange={handleInputChange}/>
               ))}
               {/* <ul>
                 {todoList.map(item => <li key={item.id}>{item.text}</li>)}
