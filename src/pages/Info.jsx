@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrevButton from "../components/PrevButton";
 import InfoInput from "../components/InfoInput";
 import AddButton from "../components/AddButton";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
-const Info = () => {
+const Info = ({sendIngredientList}) => {
   // logic
   const history = useNavigate();
   // TODO: set함수 추가하기
@@ -26,7 +26,7 @@ const Info = () => {
   };
 
   const handleRemove = (selectedId) => {
-  console.log("🚀 ~ handleRemove ~ selectedId:", selectedId)
+  // console.log("🚀 ~ handleRemove ~ selectedId:", selectedId)
 
     if(ingredientList != null && ingredientList.length > 0){
       setIngredientList(ingredientList.filter((item) => item.id !== selectedId));
@@ -38,9 +38,19 @@ const Info = () => {
   }
 
   const handleNext = () => {
-    // console.log("chat페이지로 이동");
+    // console.log("chat페이지로 이동");    
+    sendIngredientList(ingredientList);    
     history("/chat");
   };
+
+  //useEffect(() => {}, [])
+  //특정 stat가 변경될때 실행하는 경우 - 2번째 인자에 대상 입력
+  useEffect(() => {}, [ingredientList]);  
+
+  // useEffect(() => {
+    
+  //   //console.log("🚀 ~ Info ~ ingredientList:", ingredientList)
+  // }, [ingredientList]);
 
   // const todoList = [
   //   {

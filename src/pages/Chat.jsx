@@ -3,7 +3,7 @@ import MessageBox from "../components/MessageBox";
 import PrevButton from "../components/PrevButton";
 import { MoonLoader } from "react-spinners";
 
-const Chat = () => {
+const Chat = ({ingredientList}) => {
   // logic
   const endpoint = process.env.REACT_APP_SERVER_ADDRESS;
 
@@ -61,13 +61,13 @@ const sendInfo = async (data) => {
 
 useEffect(() => {
   // 페이지 진입시 딱 한번 실행
-  const newItem = {
-    id: 1,
-    lable: "lable_1",
-    text: "",
-    value: "닭가슴살"
-  }  
-  sendInfo([newItem]);
+  // const newItem = {
+  //   id: 1,
+  //   lable: "lable_1",
+  //   text: "",
+  //   value: "닭가슴살"
+  // }  
+  sendInfo(ingredientList);
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, []);
 
