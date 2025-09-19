@@ -11,18 +11,64 @@ const Chat = ({ingredientList}) => {
 
   // TODO: set함수 추가하기
   const [messages, setMessages] = useState([]); // chatGPT와 사용자의 대화 메시지 배열
-  const [isInfoLoading, setIsInfoLoading] = useState(false); // 최초 정보 요청시 로딩
-  const [isMessageLoading, setIsMessageLoading] = useState(true); // 사용자와 메시지 주고 받을때 로딩
+  const [isInfoLoading, setIsInfoLoading] = useState(true); // 최초 정보 요청시 로딩
+  const [isMessageLoading, setIsMessageLoading] = useState(false); // 사용자와 메시지 주고 받을때 로딩
   const [infoMessages, setInfoMessages] = useState([]);//초기 대화 목록
+  
   const handleChange = (event) => {
     const { value } = event.target;
-    console.log("value==>", value);
+    //console.log("value==>", value);
     setValue(value);
   };
 
-  
+  //사용자가 메시지 입력 후 보내기 버튼 클릭 시 실행
+const sendMessage = async (userMessage) => {
+  setIsMessageLoading(true);
+  try {
+    const response = await fetch(`${endpoint}/message`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userMessage,
+        messages: [...infoMessages, ...messages],
+      }),
+    });
+
+    const result = await response.json();
+
+    // chatGPT의 답변 추가
+    const { role, content } = result.data;
+    const assistantMessage = { role, content };
+    setMessages((prev) => [...prev, assistantMessage]);
+
+    console.log("🚀 ~ sendMessage ~ result:", result);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    // try 혹은 error 구문 실행후 실행되는 곳
+    setIsMessageLoading(false);
+  }
+};
+
   const handleSubmit = (event) => {
-    event.preventDefault();
+    
+    event.preventDefault();//페이지 새로고침 방지
+
+    //메시지 API 호출
+    const userMessage = {
+      role: "user",
+      content: value.trim()
+    };
+
+    
+
+    //prev:  배열
+    setMessages((prev) => [...prev, userMessage])
+
+    sendMessage(userMessage);
+
+    setValue("");
+
     console.log("메시지 보내기");
   };
 
@@ -30,6 +76,7 @@ const Chat = ({ingredientList}) => {
 const sendInfo = async (data) => {
   // async-await짝꿍
   // 백엔드에게 /recipe API요청
+  setIsInfoLoading(true); // 로딩중 ON ===========================>
   try {
     const response = await fetch(`${endpoint}/recipe`, {
       method: "POST",
@@ -54,6 +101,8 @@ const sendInfo = async (data) => {
 
     // prev: 배열
     setMessages((prev) => [...prev, { role, content }]);
+
+    setIsInfoLoading(false); //로딩중 OFF =========================>
   } catch (error) {
     console.error(error);
   }
